@@ -1,5 +1,5 @@
 # [genshin_artifact](https://github.com/forchannot/genshin_artifact)
-来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0圣遗物，适用于nonebot2，以后视情况持续适配
+来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0(以后)圣遗物，适用于nonebot2，以后视情况持续适配
 
 ## 简介
 
