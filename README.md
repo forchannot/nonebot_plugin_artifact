@@ -1,2 +1,18 @@
-# genshin_artifact
-来自https://github.com/H-K-Y/Genshin_Impact_bot的圣遗物插件，因原作者最近没适配了，自行适配了下3.0圣遗物
+# [genshin_artifact](https://github.com/forchannot/genshin_artifact)
+来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0圣遗物，适用于nonebot2的beta版，以后视情况持续适配
+
+## 简介
+
+这个插件帮助群员在QQ群内进行圣遗物刷取，强化，圣遗物评分等功能，目前已适配3.0最新圣遗物
+
+## 许可
+
+[GPL-3.0](https://github.com/forchannot/genshin_artifact/LICENSE)
+
+### 安装方法
+
+将本项目git到任意位置，随后将[nonebot_plugin_artifact_collect](https://github.com/forchannot/genshin_artifact/nonebot_plugin_artifact_collect)和[nonebot_plugin_artifact_rate](https://github.com/forchannot/genshin_artifact/nonebot_plugin_artifact_rate)两个文件夹放置到你nonebot的src/plugins/中即可
+
+### 插件使用方法
+
+![image-20221024202721208](D:/Download/genshin_artifact/img/image-20221024202721208.png)
