@@ -1,5 +1,5 @@
 # [genshin_artifact](https://github.com/forchannot/genshin_artifact)
-来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0圣遗物，适用于nonebot2的beta版，以后视情况持续适配
+来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0圣遗物，适用于nonebot2，以后视情况持续适配
 
 ## 简介
 
@@ -9,10 +9,10 @@
 
 [GPL-3.0](https://github.com/forchannot/genshin_artifact/blob/main/LICENSE)
 
-### 安装方法
+## 安装方法
 
 将本项目git到任意位置，随后将[nonebot_plugin_artifact_collect](https://github.com/forchannot/genshin_artifact/tree/main/nonebot_plugin_artifact_collect)和[nonebot_plugin_artifact_rate](https://github.com/forchannot/genshin_artifact/tree/main/nonebot_plugin_artifact_rate)两个文件夹放置到你nonebot的src/plugins/中即可
 
-### 插件使用方法
+## 插件使用方法
 
 ![https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024202721208.png](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024202721208.png)
