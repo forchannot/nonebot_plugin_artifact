@@ -11,8 +11,8 @@
 
 ## 安装方法
 
-将本项目git到任意位置，随后将[nonebot_plugin_artifact_collect](https://github.com/forchannot/genshin_artifact/tree/main/nonebot_plugin_artifact_collect)和[nonebot_plugin_artifact_rate](https://github.com/forchannot/genshin_artifact/tree/main/nonebot_plugin_artifact_rate)两个文件夹放置到你nonebot的src/plugins/中即可
+将本项目git到你nonebot的src/plugins/中即可
 
 ## 插件使用方法
 
-![插件帮助图](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024202721208.png)
+![插件帮助图](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024212121759.png)
