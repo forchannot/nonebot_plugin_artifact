@@ -15,4 +15,6 @@
 
 ## 插件使用方法
 
-![插件帮助图](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024212121759.png)
+![插件帮助图](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024214417311.png)
+
+![导入成功示例](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024212121759.png)
