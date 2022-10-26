@@ -11,7 +11,15 @@
 
 ## 安装方法
 
-将本项目git到你nonebot的src/plugins/中即可
+打开你nonebot根目录的pyproject.toml文件，检查下列代码中`plugin_dirs =`一项，将本项目git clone到该代码指示的目录去
+
+```
+[tool.nonebot]
+plugins = []
+plugin_dirs = ["src/plugins"]
+```
+
+
 
 ## 插件使用方法
 
