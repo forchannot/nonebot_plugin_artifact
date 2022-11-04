@@ -68,6 +68,8 @@ async def get_artifact_(bot: Bot, event: Event):
         obtain = '余响'
     if re.match(r'^草套|饰金|湿巾(?:本)', obtain):
         obtain = '草本'
+    if re.match(r'^散兵|花神|绽放(?:本)', obtain):
+        obtain = '绽放'
     if not (obtain in artifact_obtain.keys()):
         mes = f"没有副本名叫 {obtain} ,发送 原神副本 可查看所有副本"
         await get_artifact.finish(mes, at_sender=True)
