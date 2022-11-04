@@ -3,7 +3,7 @@
 
 ## 简介
 
-这个插件帮助群员在QQ群内进行圣遗物刷取，强化，圣遗物评分等功能，目前已适配3.0最新圣遗物
+这个插件帮助群员在QQ群内进行圣遗物刷取，强化，圣遗物评分等功能，目前已适配3.3最新圣遗物
 
 ## 许可
 
@@ -21,8 +21,5 @@ plugin_dirs = ["src/plugins"]
 
 
 
-## 插件使用方法
-
-![插件帮助图](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024214417311.png)
-
-![导入成功示例](https://github.com/forchannot/genshin_artifact/blob/main/img/image-20221024212121759.png)
+## 插件使用方法[![xqzyWD.png](https://s1.ax1x.com/2022/11/04/xqzyWD.png)](https://imgse.com/i/xqzyWD)
+[![xqzsJO.png](https://s1.ax1x.com/2022/11/04/xqzsJO.png)](https://imgse.com/i/xqzsJO)
