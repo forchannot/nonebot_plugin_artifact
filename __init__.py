@@ -299,9 +299,9 @@ async def get_user_stamina_(bot: Bot, event: MessageEvent):
 
 @recharge.handle()
 async def recharge_(bot: Bot, event: MessageEvent, arg: Message = CommandArg()):
-    if not (str(event.user_id) in bot.config.superusers):
-        await recharge.finish(f"这个指令仅限超级管理员使用")
-        return
+    # if not (str(event.user_id) in bot.config.superusers):
+    #     await recharge.finish(f"这个指令仅限超级管理员使用")
+    #     return
     msg = arg.extract_plain_text().strip()
     user = event.message["at"][0].data["qq"] if event.message.get("at") else event.user_id
     if not msg:
