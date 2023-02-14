@@ -1,27 +1,35 @@
 from nonebot import on_command, on_startswith
 from nonebot import require
-from nonebot.adapters.onebot.v11 import Message, Bot, Event
-from .Artifact import artifact_obtain, ARTIFACT_LIST, Artifact, calculate_strengthen_points
-from .config import STAMINA_RESTORE, MAX_STAMINA
-from .json_rw import init_user_info, updata_uid_stamina, user_info, save_user_info
-from .artifact_eval import *
+from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent
+from nonebot.params import CommandArg
+
+from .utils.Artifact import (
+    artifact_obtain,
+    ARTIFACT_LIST,
+    Artifact,
+    calculate_strengthen_points,
+)
+from .config.config import STAMINA_RESTORE, MAX_STAMINA
+from .utils.json_rw import init_user_info, updata_uid_stamina, user_info, save_user_info
+from .utils.artifact_eval import *
 from base64 import b64encode
 from io import BytesIO
 import random
 import re
 import requests
 
-get_obtain = on_command(cmd="原神副本", aliases={"圣遗物副本", "查看原神副本", "查看圣遗物副本"})
+get_obtain = on_command("原神副本", aliases={"圣遗物副本", "查看原神副本", "查看圣遗物副本"})
 get_artifact = on_startswith("刷副本")
 get_warehouse = on_startswith("查看圣遗物仓库")
 strengthen_artifact = on_startswith("强化圣遗物")
 artifact_info = on_startswith("圣遗物详情")
 artifact_re_init = on_startswith("圣遗物洗点")
 transform = on_startswith(("转换狗粮", "转化狗粮"))
-transform_all = on_command(cmd="转换全部0级圣遗物", aliases={"转化全部0级圣遗物", })
-get_user_stamina = on_command("查看体力值")
+transform_all = on_command("转换全部0级圣遗物", aliases={"转化全部0级圣遗物"},)
+get_user_stamina = on_command("查看体力值", aliases={"查看体力", "查看当前体力"})
 recharge = on_command("氪体力")
 artifact_rate = on_command("圣遗物评分")
+
 
 @get_obtain.handle()
 async def get_obtain_(bot: Bot):
@@ -33,43 +41,43 @@ async def get_obtain_(bot: Bot):
 
 
 @get_artifact.handle()
-async def get_artifact_(bot: Bot, event: Event):
-    msg = str(event.get_message())[3:].strip().split(' ')
+async def get_artifact_(bot: Bot, event: MessageEvent):
+    msg = str(event.get_message())[3:].strip().split(" ")
     if not msg:
         return
     obtain = msg[0]
-    ns = 2 if len(msg) > 1 and msg[1] in ['浓缩', 'ns'] else 1
+    ns = 2 if len(msg) > 1 and msg[1] in ["浓缩", "ns"] else 1
     uid = str(event.user_id)
     init_user_info(uid)
 
     if obtain == "":
         return
-    if re.match(r'^魔女|渡火(?:本)', obtain):
-        obtain = '火本'
-    if re.match(r'^防御|毒奶(?:本)', obtain):
-        obtain = '华馆'
-    if re.match(r'^绝缘|旗印|追忆|注连(?:本)', obtain):
-        obtain = '充能'
-    if re.match(r'^物理|千岩(?:本)', obtain):
-        obtain = '苍白'
-    if re.match(r'^逆飞|流星|磐岩(?:本)', obtain):
-        obtain = '岩本'
-    if re.match(r'^沉沦|水套|冰套|雪山(?:本)', obtain):
-        obtain = '冰本'
-    if re.match(r'^风套|翠绿|少女(?:本)', obtain):
-        obtain = '风本'
-    if re.match(r'^骑士|染血|宗室(?:本)', obtain):
-        obtain = '宗室本'
-    if re.match(r'^如雷|平雷|(?:本)', obtain):
-        obtain = '雷本'
-    if re.match(r'^乐团|角斗|周(?:本)', obtain):
-        obtain = '龙狼'
-    if re.match(r'^普攻|掉血|流血(?:本)', obtain):
-        obtain = '余响'
-    if re.match(r'^草套|饰金|湿巾(?:本)', obtain):
-        obtain = '草本'
-    if re.match(r'^散兵|花神|绽放(?:本)', obtain):
-        obtain = '绽放'
+    if re.match(r"^魔女|渡火(?:本)", obtain):
+        obtain = "火本"
+    if re.match(r"^防御|毒奶(?:本)", obtain):
+        obtain = "华馆"
+    if re.match(r"^绝缘|旗印|追忆|注连(?:本)", obtain):
+        obtain = "充能"
+    if re.match(r"^物理|千岩(?:本)", obtain):
+        obtain = "苍白"
+    if re.match(r"^逆飞|流星|磐岩(?:本)", obtain):
+        obtain = "岩本"
+    if re.match(r"^沉沦|水套|冰套|雪山(?:本)", obtain):
+        obtain = "冰本"
+    if re.match(r"^风套|翠绿|少女(?:本)", obtain):
+        obtain = "风本"
+    if re.match(r"^骑士|染血|宗室(?:本)", obtain):
+        obtain = "宗室本"
+    if re.match(r"^如雷|平雷|(?:本)", obtain):
+        obtain = "雷本"
+    if re.match(r"^乐团|角斗|周(?:本)", obtain):
+        obtain = "龙狼"
+    if re.match(r"^普攻|掉血|流血(?:本)", obtain):
+        obtain = "余响"
+    if re.match(r"^草套|饰金|湿巾(?:本)", obtain):
+        obtain = "草本"
+    if re.match(r"^散兵|花神|绽放(?:本)", obtain):
+        obtain = "绽放"
     if not (obtain in artifact_obtain.keys()):
         mes = f"没有副本名叫 {obtain} ,发送 原神副本 可查看所有副本"
         await get_artifact.finish(mes, at_sender=True)
@@ -117,7 +125,7 @@ async def get_artifact_(bot: Bot, event: Event):
 
 
 @get_warehouse.handle()
-async def get_warehouse_(bot: Bot, event: Event):
+async def get_warehouse_(bot: Bot, event: MessageEvent):
     page = str(event.get_message())[7:].strip()
     uid = str(event.user_id)
     init_user_info(uid)
@@ -154,7 +162,7 @@ async def get_warehouse_(bot: Bot, event: Event):
 
 
 @strengthen_artifact.handle()
-async def strengthen_artifact_(bot: Bot, event: Event):
+async def strengthen_artifact_(bot: Bot, event: MessageEvent):
     uid = str(event.user_id)
     init_user_info(uid)
 
@@ -174,12 +182,15 @@ async def strengthen_artifact_(bot: Bot, event: Event):
 
     strengthen_level = int(strengthen_level)
     artifact = Artifact(artifact)
-    strengthen_point = calculate_strengthen_points(artifact.level + 1, artifact.level + strengthen_level)
+    strengthen_point = calculate_strengthen_points(
+        artifact.level + 1, artifact.level + strengthen_level
+    )
 
     if strengthen_point > user_info[uid]["strengthen_points"]:
         await strengthen_artifact.finish(
             "狗粮点数不足\n你可以发送 刷副本 副本名称 获取狗粮点数\n或者发送 转换狗粮 圣遗物编号 销毁仓库里不需要的圣遗物获取狗粮点数\n发送 转换全部0级圣遗物 可将全部0级圣遗物销毁",
-            at_sender=True)
+            at_sender=True,
+        )
         return
 
     user_info[uid]["strengthen_points"] -= strengthen_point
@@ -196,7 +207,7 @@ async def strengthen_artifact_(bot: Bot, event: Event):
 
 
 @artifact_info.handle()
-async def artifact_info_(bot: Bot, event: Event):
+async def artifact_info_(bot: Bot, event: MessageEvent):
     number = str(event.get_message())[5:].strip()
     uid = str(event.user_id)
     init_user_info(uid)
@@ -212,7 +223,7 @@ async def artifact_info_(bot: Bot, event: Event):
 
 
 @artifact_re_init.handle()
-async def artifact_re_init_(bot: Bot, event: Event):
+async def artifact_re_init_(bot: Bot, event: MessageEvent):
     number = str(event.get_message())[5:].strip()
     uid = str(event.user_id)
     init_user_info(uid)
@@ -245,8 +256,8 @@ async def artifact_re_init_(bot: Bot, event: Event):
 
 
 @transform.handle()
-async def transform_(bot: Bot, event: Event):
-    number = str(event.get_message())[4:].strip().split(' ')
+async def transform_(bot: Bot, event: MessageEvent):
+    number = str(event.get_message())[4:].strip().split(" ")
     number = [int(i) for i in number]
     uid = str(event.user_id)
     init_user_info(uid)
@@ -278,7 +289,7 @@ async def transform_(bot: Bot, event: Event):
 
 
 @get_user_stamina.handle()
-async def get_user_stamina_(bot: Bot, event: Event):
+async def get_user_stamina_(bot: Bot, event: MessageEvent):
     uid = str(event.user_id)
     init_user_info(uid)
     mes = f"你当前的体力值为 {int(user_info[uid]['stamina'])} ,体力值每 {STAMINA_RESTORE} 分钟恢复1点，自动恢复上限为 {MAX_STAMINA}\n"
@@ -287,21 +298,24 @@ async def get_user_stamina_(bot: Bot, event: Event):
 
 
 @recharge.handle()
-async def recharge_(bot: Bot, event: Event):
+async def recharge_(bot: Bot, event: MessageEvent, arg: Message = CommandArg()):
     if not (str(event.user_id) in bot.config.superusers):
         await recharge.finish(f"这个指令仅限超级管理员使用")
         return
-    for m in event.message:
-        if m.type == 'at' and m.data['qq'] != 'all':
-            uid = str(m.data['qq'])
-            init_user_info(uid)
-            user_info[uid]["stamina"] += 60
+    msg = arg.extract_plain_text().strip()
+    user = event.message["at"][0].data["qq"] if event.message.get("at") else event.user_id
+    if not msg:
+        obtain = 60
+    else:
+        obtain = int(msg)
+    init_user_info(str(user))
+    user_info[str(user)]["stamina"] += obtain
     save_user_info()
     await recharge.finish(f"充值完毕！谢谢惠顾～")
 
 
 @transform_all.handle()
-async def transform_all_(bot: Bot, event: Event):
+async def transform_all_(bot: Bot, event: MessageEvent):
     uid = str(event.user_id)
     init_user_info(uid)
 
@@ -320,7 +334,9 @@ async def transform_all_(bot: Bot, event: Event):
     user_info[uid]["strengthen_points"] += strengthen_points
     save_user_info()
 
-    await transform_all.finish(f"0级圣遗物已全部转化为狗粮，共转化 {_0_level_artifact} 个圣遗物，获得狗粮点数 {strengthen_points}")
+    await transform_all.finish(
+        f"0级圣遗物已全部转化为狗粮，共转化 {_0_level_artifact} 个圣遗物，获得狗粮点数 {strengthen_points}"
+    )
 
 
 updata_stamina = require("nonebot_plugin_apscheduler").scheduler
@@ -334,15 +350,15 @@ async def get_format_sub_item(artifact_attr):
 
 
 @artifact_rate.handle()
-async def artifact_rate_(bot: Bot, event: Event):
-    if '[CQ:image' not in event.raw_message:
+async def artifact_rate_(bot: Bot, event: MessageEvent):
+    if "[CQ:image" not in event.raw_message:
         await artifact_rate.finish("图呢？\n*请将指令与截图一起发送", at_sender=True)
         return
     if len(event.message) > 2:
         await artifact_rate.finish("只能上传一张截图哦", at_sender=True)
         return
     for i in event.message:
-        if i.type == 'image':
+        if i.type == "image":
             image_url = i.data["url"]
             break
         continue
@@ -352,25 +368,28 @@ async def artifact_rate_(bot: Bot, event: Event):
     try:
         artifact_attr = await get_artifact_attr(image_b64)
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
-        await artifact_rate.finish( f"连接超时", at_sender=True)
+        await artifact_rate.finish(f"连接超时", at_sender=True)
         return
-    if 'err' in artifact_attr.keys():
+    if "err" in artifact_attr.keys():
         err_msg = artifact_attr["full"]["message"]
-        await artifact_rate.finish( f"发生了点小错误：\n{err_msg}", at_sender=True)
+        await artifact_rate.finish(f"发生了点小错误：\n{err_msg}", at_sender=True)
         return
     # await bot.send(ev, f"识图成功！\n正在评分中...", at_sender=True)
     rate_result = await rate_artifact(artifact_attr)
-    if 'err' in rate_result.keys():
+    if "err" in rate_result.keys():
         err_msg = rate_result["full"]["message"]
-        await artifact_rate.finish(f"发生了点小错误：\n{err_msg}\n*注：将在下版本加入属性修改", at_sender=True)
+        await artifact_rate.finish(
+            f"发生了点小错误：\n{err_msg}\n*注：将在下版本加入属性修改", at_sender=True
+        )
         return
-    format_result = f'圣遗物评分结果：\n主属性：{artifact_attr["main_item"]["name"]}\n{await get_format_sub_item(artifact_attr)}'\
-                    f'------------------------------\n总分：{rate_result["total_percent"]}\n'\
-                    f'主词条：{rate_result["main_percent"]}\n副词条：{rate_result["sub_percent"]}\n评分、识图均来自genshin.pub'
-    await artifact_rate.finish( Message(format_result), at_sender=True)
+    format_result = (
+        f'圣遗物评分结果：\n主属性：{artifact_attr["main_item"]["name"]}\n{await get_format_sub_item(artifact_attr)}'
+        f'------------------------------\n总分：{rate_result["total_percent"]}\n'
+        f'主词条：{rate_result["main_percent"]}\n副词条：{rate_result["sub_percent"]}\n评分、识图均来自genshin.pub'
+    )
+    await artifact_rate.finish(Message(format_result), at_sender=True)
 
 
-@updata_stamina.scheduled_job('interval', minutes=STAMINA_RESTORE)
+@updata_stamina.scheduled_job("interval", minutes=STAMINA_RESTORE)
 async def _call():
     updata_uid_stamina()
-

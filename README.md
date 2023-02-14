@@ -11,7 +11,7 @@
 
 ## 安装方法
 
-打开你nonebot根目录的pyproject.toml文件，检查下列代码中`plugin_dirs =`一项，将本项目git clone到该代码指示的目录去
+打开你nonebot根目录的pyproject.toml文件，找到下列代码中`plugin_dirs =`一项，将本项目git clone(或者直接Download Zip并解压)到该代码指示的目录去，推荐使用git clone
 
 ```
 [tool.nonebot]
@@ -21,5 +21,15 @@ plugin_dirs = ["src/plugins"]
 
 
 
-## 插件使用方法[![xqzyWD.png](https://s1.ax1x.com/2022/11/04/xqzyWD.png)](https://imgse.com/i/xqzyWD)
-[![xqzsJO.png](https://s1.ax1x.com/2022/11/04/xqzsJO.png)](https://imgse.com/i/xqzsJO)
+## 插件命令
+| 命令概述   | 使用方法                     |
+| ---------- | ---------------------------- |
+| 刷副本     | 刷副本 副本名 浓缩(可选)     |
+| 圣遗物评分 | 圣遗物评分(带图)             |
+| 转换狗粮   | 转换狗粮 序号                |
+| 查看体力值 | 查看体力值                   |
+| 转换圣遗物 | 转换全部0级圣遗物            |
+| 氪体力     | 氪体力 数量 @(数量和@都可选) |
+| 强化圣遗物 | 强化圣遗物X级 序号           |
+| 查看圣遗物 | 查看圣遗物仓库               |
+
