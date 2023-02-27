@@ -1,6 +1,7 @@
+import pandas as pd
 from nonebot import on_command, on_startswith
 from nonebot import require
-from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent
+from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
 
 from .utils.Artifact import (
@@ -14,6 +15,7 @@ from .utils.json_rw import init_user_info, updata_uid_stamina, user_info, save_u
 from .utils.artifact_eval import *
 from base64 import b64encode
 from io import BytesIO
+from nonebot_plugin_htmlrender import md_to_pic
 import random
 import re
 import requests
@@ -33,11 +35,15 @@ artifact_rate = on_command("圣遗物评分")
 
 @get_obtain.handle()
 async def get_obtain_(bot: Bot):
-    mes = "当前副本如下\n"
-    for name in artifact_obtain.keys():
-        suits = " ".join(artifact_obtain[name])
-        mes += f"{name}  掉落  {suits}\n"
-    await get_obtain.finish(mes, at_sender=True)
+    data = []
+    for name, artifact in artifact_obtain.items():
+        data.append((name, " ".join(artifact)))
+    df = pd.DataFrame(data, columns=['副本名', '掉落圣遗物'])
+    md = df.to_markdown(index=False)
+    pic = await md_to_pic(md=md)
+    await get_obtain.send(
+        MessageSegment.image(pic)
+    )
 
 
 @get_artifact.handle()
