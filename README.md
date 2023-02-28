@@ -1,12 +1,13 @@
 # [genshin_artifact](https://github.com/forchannot/genshin_artifact)
 来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0(以后)圣遗物，适用于nonebot2，以后视情况持续适配
 <!-- TOC -->
-* [目录](#genshinartifact)
+* [genshin_artifact](#genshinartifact)
   * [简介](#简介)
   * [许可](#许可)
   * [安装方法](#安装方法)
   * [安装依赖](#安装依赖)
   * [插件命令](#插件命令)
+  * [插件配置项](#插件配置项)
   * [常见问题](#常见问题)
 <!-- TOC -->
 ## 简介
@@ -50,10 +51,12 @@ plugin_dirs = ["src/plugins"]
 `use_pic=False/True`
 True为开启原神副本图片发送,False为关闭,默认为False
 
+如果设置为True请参考[安装依赖](#安装依赖)
+
 ## 常见问题
 Q:启动报错有关`nonebot_plugin_htmlrender`
 
-A：在你的机器人的`bot.py`文件中`nonebot.load_from_toml("pyproject.toml")`上面增加一行`nonebot.load_plugin("nonebot_plugin_htmlrender")`，使得`nonebot_plugin_htmlrender`先于本插件启动
+A：首先检查依赖是否安装在虚拟环境中,随后在你的机器人的`bot.py`文件中`nonebot.load_from_toml("pyproject.toml")`上面增加一行`nonebot.load_plugin("nonebot_plugin_htmlrender")`，使得`nonebot_plugin_htmlrender`先于本插件启动
 
 Q:No module named xxx
 
