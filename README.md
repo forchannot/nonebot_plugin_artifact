@@ -44,6 +44,12 @@ plugin_dirs = ["src/plugins"]
 | 强化圣遗物  | 强化圣遗物X级 序号        |
 | 查看圣遗物  | 查看圣遗物仓库           |
 
+## 插件配置项
+在全局配置文件.env.prod中添加如下
+
+`use_pic=False/True`
+True为开启原神副本图片发送,False为关闭,默认为False
+
 ## 常见问题
 Q:启动报错有关`nonebot_plugin_htmlrender`
 

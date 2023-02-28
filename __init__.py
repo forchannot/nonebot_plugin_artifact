@@ -1,6 +1,4 @@
-import pandas as pd
-from nonebot import on_command, on_startswith
-from nonebot import require
+from nonebot import on_command, on_startswith, require, get_driver
 from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
 
@@ -10,12 +8,12 @@ from .utils.Artifact import (
     Artifact,
     calculate_strengthen_points,
 )
-from .config.config import STAMINA_RESTORE, MAX_STAMINA
+from .config.config import STAMINA_RESTORE, MAX_STAMINA, Config
 from .utils.json_rw import init_user_info, updata_uid_stamina, user_info, save_user_info
 from .utils.artifact_eval import *
 from base64 import b64encode
 from io import BytesIO
-from nonebot_plugin_htmlrender import md_to_pic
+
 import random
 import re
 import requests
@@ -27,7 +25,10 @@ strengthen_artifact = on_startswith("强化圣遗物")
 artifact_info = on_startswith("圣遗物详情")
 artifact_re_init = on_startswith("圣遗物洗点")
 transform = on_startswith(("转换狗粮", "转化狗粮"))
-transform_all = on_command("转换全部0级圣遗物", aliases={"转化全部0级圣遗物"},)
+transform_all = on_command(
+    "转换全部0级圣遗物",
+    aliases={"转化全部0级圣遗物"},
+)
 get_user_stamina = on_command("查看体力值", aliases={"查看体力", "查看当前体力"})
 recharge = on_command("氪体力")
 artifact_rate = on_command("圣遗物评分")
@@ -35,15 +36,25 @@ artifact_rate = on_command("圣遗物评分")
 
 @get_obtain.handle()
 async def get_obtain_(bot: Bot):
-    data = []
-    for name, artifact in artifact_obtain.items():
-        data.append((name, " ".join(artifact)))
-    df = pd.DataFrame(data, columns=['副本名', '掉落圣遗物'])
-    md = df.to_markdown(index=False)
-    pic = await md_to_pic(md=md)
-    await get_obtain.send(
-        MessageSegment.image(pic)
-    )
+    use_pic = Config.parse_obj(get_driver().config.dict()).use_pic
+    if use_pic:
+
+        import pandas as pd
+        from nonebot_plugin_htmlrender import md_to_pic
+
+        data = []
+        for name, artifact in artifact_obtain.items():
+            data.append((name, " ".join(artifact)))
+        df = pd.DataFrame(data, columns=["副本名", "掉落圣遗物"])
+        md = df.to_markdown(index=False)
+        pic = await md_to_pic(md=md)
+        await get_obtain.send(MessageSegment.image(pic))
+    else:
+        mes = "当前副本如下\n"
+        for name in artifact_obtain.keys():
+            suits = " ".join(artifact_obtain[name])
+            mes += f"{name}  掉落  {suits}\n"
+        await get_obtain.finish(mes, at_sender=True)
 
 
 @get_artifact.handle()
@@ -309,7 +320,9 @@ async def recharge_(bot: Bot, event: MessageEvent, arg: Message = CommandArg()):
     #     await recharge.finish(f"这个指令仅限超级管理员使用")
     #     return
     msg = arg.extract_plain_text().strip()
-    user = event.message["at"][0].data["qq"] if event.message.get("at") else event.user_id
+    user = (
+        event.message["at"][0].data["qq"] if event.message.get("at") else event.user_id
+    )
     if not msg:
         obtain = 60
     else:
