@@ -18,7 +18,9 @@ PROPERTY_LIST = {}
 artifact_obtain = {}
 flower, feather, hourglass, cup, crown = (0, 1, 2, 3, 4)
 
-back_image = Image.open(os.path.join(FILE_PATH, "../resources/actifact", "background.png"))
+back_image = Image.open(
+    os.path.join(FILE_PATH, "../resources/actifact", "background.png")
+)
 ttf_path = os.path.join(FILE_PATH, "../resources/fonts/zh-cn.ttf")
 
 

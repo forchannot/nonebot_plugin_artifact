@@ -2,6 +2,7 @@ from nonebot import on_command, on_startswith, require, get_driver
 from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
 
+from .utils.draw import draw_obtain
 from .utils.Artifact import (
     artifact_obtain,
     ARTIFACT_LIST,
@@ -38,16 +39,10 @@ artifact_rate = on_command("圣遗物评分")
 async def get_obtain_(bot: Bot):
     use_pic = Config.parse_obj(get_driver().config.dict()).use_pic
     if use_pic:
-
-        import pandas as pd
-        from nonebot_plugin_htmlrender import md_to_pic
-
         data = []
         for name, artifact in artifact_obtain.items():
             data.append((name, " ".join(artifact)))
-        df = pd.DataFrame(data, columns=["副本名", "掉落圣遗物"])
-        md = df.to_markdown(index=False)
-        pic = await md_to_pic(md=md)
+        pic = draw_obtain(data)
         await get_obtain.send(MessageSegment.image(pic))
     else:
         mes = "当前副本如下\n"
