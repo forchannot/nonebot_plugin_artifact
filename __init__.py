@@ -2,7 +2,7 @@ from nonebot import on_command, on_startswith, require, get_driver
 from nonebot.adapters.onebot.v11 import Message, Bot, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
 
-from .utils.draw import draw_obtain
+
 from .utils.Artifact import (
     artifact_obtain,
     ARTIFACT_LIST,
@@ -12,6 +12,7 @@ from .utils.Artifact import (
 from .config.config import STAMINA_RESTORE, MAX_STAMINA, Config
 from .utils.json_rw import init_user_info, updata_uid_stamina, user_info, save_user_info
 from .utils.artifact_eval import *
+from pathlib import Path
 from base64 import b64encode
 from io import BytesIO
 
@@ -39,10 +40,7 @@ artifact_rate = on_command("圣遗物评分")
 async def get_obtain_(bot: Bot):
     use_pic = Config.parse_obj(get_driver().config.dict()).use_pic
     if use_pic:
-        data = []
-        for name, artifact in artifact_obtain.items():
-            data.append((name, " ".join(artifact)))
-        pic = draw_obtain(data)
+        pic = Path(__file__).parent / "resources" / "table.png"
         await get_obtain.send(MessageSegment.image(pic))
     else:
         mes = "当前副本如下\n"
