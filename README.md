@@ -1,5 +1,5 @@
 # [genshin_artifact](https://github.com/forchannot/genshin_artifact)
-来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0(以后)圣遗物，适用于nonebot2，以后视情况持续适配
+来自[Genshin_Impact_bot](https://github.com/H-K-Y/Genshin_Impact_bot)的圣遗物插件，因原作者最近没适配了，自行适配了下3.0(以后)圣遗物，适用于nonebot2，目前适配进度3.6
 <!-- TOC -->
 * [genshin_artifact](#genshinartifact)
   * [简介](#简介)
@@ -12,7 +12,7 @@
 <!-- TOC -->
 ## 简介
 
-这个插件帮助群员在QQ群内进行圣遗物刷取，强化，圣遗物评分等功能，目前已适配3.3最新圣遗物
+这个插件帮助群员在QQ群内进行圣遗物刷取，强化，圣遗物评分等功能，目前已适配3.6最新圣遗物
 
 ## 许可
 
