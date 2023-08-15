@@ -62,42 +62,32 @@ async def get_artifact_(bot: Bot, event: MessageEvent):
 
     if obtain == "":
         return
-    if re.match(r"^魔女|渡火(?:本)", obtain):
-        obtain = "火本"
-    if re.match(r"^防御|毒奶(?:本)", obtain):
-        obtain = "华馆"
-    if re.match(r"^绝缘|旗印|追忆|注连(?:本)", obtain):
-        obtain = "充能"
-    if re.match(r"^物理|千岩(?:本)", obtain):
-        obtain = "苍白"
-    if re.match(r"^逆飞|流星|磐岩(?:本)", obtain):
-        obtain = "岩本"
-    if re.match(r"^沉沦|水套|冰套|雪山(?:本)", obtain):
-        obtain = "冰本"
-    if re.match(r"^风套|翠绿|少女(?:本)", obtain):
-        obtain = "风本"
-    if re.match(r"^骑士|染血|宗室(?:本)", obtain):
-        obtain = "宗室本"
-    if re.match(r"^如雷|平雷|(?:本)", obtain):
-        obtain = "雷本"
-    if re.match(r"^乐团|角斗|周(?:本)", obtain):
-        obtain = "龙狼"
-    if re.match(r"^普攻|掉血|流血(?:本)", obtain):
-        obtain = "余响"
-    if re.match(r"^草套|饰金|湿巾(?:本)", obtain):
-        obtain = "草本"
-    if re.match(r"^散兵|花神|绽放(?:本)", obtain):
-        obtain = "绽放"
-    if re.match(r"^花海|水仙|甘露(?:本)", obtain):
-        obtain = "水仙"
+    artifact_obtain_map = {
+        r"^魔女|渡火(?:本)": "火本",
+        r"^防御|毒奶(?:本)": "华馆",
+        r"^绝缘|旗印|追忆|注连(?:本)": "充能",
+        r"^物理|千岩(?:本)": "苍白",
+        r"^逆飞|流星|磐岩(?:本)": "岩本",
+        r"^沉沦|水套|冰套|雪山(?:本)": "冰本",
+        r"^风套|翠绿|少女(?:本)": "风本",
+        r"^骑士|染血|宗室(?:本)": "宗室本",
+        r"^如雷|平雷|(?:本)": "雷本",
+        r"^乐团|角斗|周(?:本)": "龙狼",
+        r"^普攻|掉血|流血(?:本)": "余响",
+        r"^草套|饰金|湿巾(?:本)": "草本",
+        r"^散兵|花神|绽放(?:本)": "绽放",
+        r"^花海|水仙|甘露(?:本)": "水仙",
+    }
+    for pattern, name in artifact_obtain_map.items():
+        if re.match(pattern, obtain):
+            obtain = name
+            break
     if not (obtain in artifact_obtain.keys()):
         mes = f"没有副本名叫 {obtain} ,发送 原神副本 可查看所有副本"
         await get_artifact.finish(mes, at_sender=True)
-        return
 
     if user_info[uid]["stamina"] < 20 * ns:
         await get_artifact.finish("体力值不足，请等待体力恢复.\n发送 查看体力值 可查看当前体力", at_sender=True)
-        return
 
     user_info[uid]["stamina"] -= 20 * ns
     # 随机掉了几个圣遗物
@@ -146,7 +136,6 @@ async def get_warehouse_(bot: Bot, event: MessageEvent):
 
     if not page.isdigit():
         await get_warehouse.finish("你需要输入一个数字", at_sender=True)
-        return
 
     page = int(page)
 
@@ -177,25 +166,23 @@ async def get_warehouse_(bot: Bot, event: MessageEvent):
 async def strengthen_artifact_(bot: Bot, event: MessageEvent):
     uid = str(event.user_id)
     init_user_info(uid)
-
     try:
         txt = str(event.get_message())[5:].replace(" ", "")
         strengthen_level, number = txt.split("级")
-
     except Exception:
         await strengthen_artifact.finish("指令格式错误", at_sender=True)
-        return
 
     try:
+        # noinspection PyUnboundLocalVariable
         artifact = user_info[uid]["warehouse"][int(number) - 1]
     except IndexError:
         await strengthen_artifact.finish("圣遗物编号错误", at_sender=True)
-        return
 
-    strengthen_level = int(strengthen_level)
+    # noinspection PyUnboundLocalVariable
     artifact = Artifact(artifact)
+    # noinspection PyUnboundLocalVariable
     strengthen_point = calculate_strengthen_points(
-        artifact.level + 1, artifact.level + strengthen_level
+        artifact.level + 1, artifact.level + int(strengthen_level)
     )
 
     if strengthen_point > user_info[uid]["strengthen_points"]:
@@ -203,11 +190,10 @@ async def strengthen_artifact_(bot: Bot, event: MessageEvent):
             "狗粮点数不足\n你可以发送 刷副本 副本名称 获取狗粮点数\n或者发送 转换狗粮 圣遗物编号 销毁仓库里不需要的圣遗物获取狗粮点数\n发送 转换全部0级圣遗物 可将全部0级圣遗物销毁",
             at_sender=True,
         )
-        return
 
     user_info[uid]["strengthen_points"] -= strengthen_point
 
-    for _ in range(strengthen_level):
+    for _ in range(int(strengthen_level)):
         artifact.strengthen()
 
     mes = "强化成功，当前圣遗物属性为：\n"
@@ -244,13 +230,12 @@ async def artifact_re_init_(bot: Bot, event: MessageEvent):
         artifact = user_info[uid]["warehouse"][int(number) - 1]
     except IndexError:
         await artifact_re_init.finish("编号错误", at_sender=True)
-        return
 
+    # noinspection PyUnboundLocalVariable
     artifact = Artifact(artifact)
 
     if artifact.level < 20:
         await artifact_re_init.finish("没有强化满的圣遗物不能洗点", at_sender=True)
-        return
 
     strengthen_points = calculate_strengthen_points(1, artifact.level)
     strengthen_points = int(strengthen_points * 0.5)
@@ -281,7 +266,7 @@ async def transform_(bot: Bot, event: MessageEvent):
             artifact = user_info[uid]["warehouse"][n - 1 - ln]
         except IndexError:
             await transform.finish("编号错误", at_sender=True)
-            return
+        # noinspection PyUnboundLocalVariable
         artifact = Artifact(artifact)
 
         strengthen_points = calculate_strengthen_points(0, artifact.level)
@@ -367,27 +352,25 @@ async def get_format_sub_item(artifact_attr):
 async def artifact_rate_(bot: Bot, event: MessageEvent):
     if "[CQ:image" not in event.raw_message:
         await artifact_rate.finish("图呢？\n*请将指令与截图一起发送", at_sender=True)
-        return
     if len(event.message) > 2:
         await artifact_rate.finish("只能上传一张截图哦", at_sender=True)
-        return
     for i in event.message:
         if i.type == "image":
             image_url = i.data["url"]
             break
         continue
     # await bot.send(ev, f"图片收到啦~\n正在识图中...")
+    # noinspection PyUnboundLocalVariable
     image_content = BytesIO(requests.get(image_url).content)
     image_b64 = b64encode(image_content.read()).decode()
     try:
         artifact_attr = await get_artifact_attr(image_b64)
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
         await artifact_rate.finish(f"连接超时", at_sender=True)
-        return
+    # noinspection PyUnboundLocalVariable
     if "err" in artifact_attr.keys():
         err_msg = artifact_attr["full"]["message"]
         await artifact_rate.finish(f"发生了点小错误：\n{err_msg}", at_sender=True)
-        return
     # await bot.send(ev, f"识图成功！\n正在评分中...", at_sender=True)
     rate_result = await rate_artifact(artifact_attr)
     if "err" in rate_result.keys():
@@ -395,7 +378,6 @@ async def artifact_rate_(bot: Bot, event: MessageEvent):
         await artifact_rate.finish(
             f"发生了点小错误：\n{err_msg}\n*注：将在下版本加入属性修改", at_sender=True
         )
-        return
     format_result = (
         f'圣遗物评分结果：\n主属性：{artifact_attr["main_item"]["name"]}\n{await get_format_sub_item(artifact_attr)}'
         f'------------------------------\n总分：{rate_result["total_percent"]}\n'
