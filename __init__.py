@@ -77,14 +77,14 @@ async def get_artifact_(bot: Bot, event: MessageEvent):
         r"^草套|饰金|湿巾": "草本",
         r"^散兵|花神|绽放": "绽放",
         r"^花海|水仙|甘露": "水仙",
-        r"^猎人|逐影": "猎人",
-        r"^剧团|黄金": "黄金"
+        r"^剧团|黄金|猎人|逐影": "黄金",
+        r"^昔时|回声|夜话": "昔时"
     }
     for pattern, name in artifact_obtain_map.items():
         if re.match(f"{pattern}本", obtain):
             obtain = name
             break
-    if not (obtain in artifact_obtain.keys()):
+    if obtain not in artifact_obtain.keys():
         mes = f"没有副本名叫 {obtain} ,发送 原神副本 可查看所有副本"
         await get_artifact.finish(mes, at_sender=True)
 
